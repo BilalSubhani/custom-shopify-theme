@@ -37,46 +37,6 @@
           </div>
         {% endif %}
       </div>
-
-      <!-- Quick Links Column -->
-      <div class="footer-column">
-        <h3>{{ section.settings.quick_links_title }}</h3>
-        <ul class="footer-links">
-          {% for link in linklists[section.settings.quick_links_menu].links %}
-            <li>
-              <a href="{{ link.url }}">{{ link.title }}</a>
-            </li>
-          {% endfor %}
-        </ul>
-      </div>
-
-      <!-- Customer Service Column -->
-      <div class="footer-column">
-        <h3>{{ section.settings.customer_service_title }}</h3>
-        <ul class="footer-links">
-          {% for link in linklists[section.settings.customer_service_menu].links %}
-            <li>
-              <a href="{{ link.url }}">{{ link.title }}</a>
-            </li>
-          {% endfor %}
-        </ul>
-      </div>
-
-      <!-- Newsletter Column -->
-      <div class="footer-column">
-        <h3>{{ section.settings.newsletter_title }}</h3>
-        <div class="newsletter-section">
-          {% form 'customer', id: 'footer-newsletter-form' %}
-            <div class="newsletter-form">
-              <input type="email" name="contact[email]" placeholder="{{ section.settings.newsletter_placeholder }}" required>
-              <button type="submit">{{ section.settings.newsletter_button_text }}</button>
-            </div>
-            {% if form.posted_successfully? %}
-              <p class="newsletter-success">{{ 'general.newsletter_form.confirmation' | t }}</p>
-            {% endif %}
-          {% endform %}
-        </div>
-      </div>
     </div>
 
     <!-- Bottom Footer -->
@@ -115,7 +75,7 @@
       "type": "richtext",
       "id": "about_text",
       "label": "About Text",
-      "default": "<p>Share information about your store and brand.</p>"
+      "default": "<p>Shopify custom themed.</p>"
     },
     {
       "type": "checkbox",
