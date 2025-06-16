@@ -22,8 +22,8 @@ jobs:
           SHOPIFY_API_PASSWORD: ${{ secrets.SHOPIFY_API_PASSWORD }}
           SHOPIFY_THEME_ID: ${{ secrets.SHOPIFY_THEME_ID }}
         run: |
-          shopify theme push \
+          shopify theme publish \
             --store=$SHOPIFY_STORE_URL \
             --password=$SHOPIFY_API_PASSWORD \
-            --theme-id=$SHOPIFY_THEME_ID \
+            --theme=$SHOPIFY_THEME_ID \
             --live
