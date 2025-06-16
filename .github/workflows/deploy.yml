@@ -3,35 +3,27 @@ name: Deploy Shopify Theme
 on:
   push:
     branches:
-      - main
+      - main # Or your target branch
 
 jobs:
   deploy:
-    name: Upload Theme to Shopify
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "18"
-
       - name: Install Shopify CLI
-        run: |
-          npm install -g @shopify/cli
+        run: npm install -g @shopify/cli
 
-      - name: Authenticate & Push Theme
+      - name: Deploy theme to Shopify
         env:
-          SHOPIFY_STORE: ${{ secrets.SHOPIFY_STORE }}
-          SHOPIFY_PASSWORD: ${{ secrets.SHOPIFY_PASSWORD }}
+          SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
+          SHOPIFY_API_PASSWORD: ${{ secrets.SHOPIFY_API_PASSWORD }}
           SHOPIFY_THEME_ID: ${{ secrets.SHOPIFY_THEME_ID }}
         run: |
           shopify theme push \
-            --store=$SHOPIFY_STORE \
+            --store=$SHOPIFY_STORE_URL \
+            --password=$SHOPIFY_API_PASSWORD \
             --theme=$SHOPIFY_THEME_ID \
-            --password=$SHOPIFY_PASSWORD \
-            --live \
-            --path=.
+            --live
