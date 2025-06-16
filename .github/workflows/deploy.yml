@@ -13,16 +13,32 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
       - name: Install Shopify CLI
-        run: npm install -g @shopify/cli
+        run: npm install -g @shopify/cli@latest
 
-      - name: Deploy theme to Shopify
+      - name: Push (update) and then Publish Shopify Theme
         env:
           SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
           SHOPIFY_API_PASSWORD: ${{ secrets.SHOPIFY_API_PASSWORD }}
-          SHOPIFY_THEME_ID: ${{ secrets.SHOPIFY_THEME_ID }}
+          SHOPIFY_THEME_ID: ${{ secrets.SHOPIFY_THEME_ID }} # This should be the ID of the theme you want to publish
         run: |
+          # Step 1: Push the theme to ensure it's up-to-date and to authenticate implicitly
+          # The --password flag is critical here for non-interactive authentication.
+          echo "Pushing theme to ID: $SHOPIFY_THEME_ID on $SHOPIFY_STORE_URL"
+          shopify theme push \
+            --store=$SHOPIFY_STORE_URL \
+            --password=$SHOPIFY_API_PASSWORD \
+            --theme=$SHOPIFY_THEME_ID
+
+          # Step 2: Publish the theme
+          # The publish command should now be able to use the established session
+          # or the credentials provided in the environment.
+          echo "Publishing theme with ID: $SHOPIFY_THEME_ID"
           shopify theme publish \
             --store=$SHOPIFY_STORE_URL \
             --password=$SHOPIFY_API_PASSWORD \
-            --theme=$SHOPIFY_THEME_ID \
+            --theme=$SHOPIFY_THEME_ID
