@@ -1,54 +1,9 @@
 {% comment %}Search and Filter Section{% endcomment %}
 <div class="shop-controls">
-  <form action="{{ routes.collections_url }}" method="get" class="filter-form">
-    <input type="hidden" name="view" value="grid">
-    
-    <div class="search-form">
-      <input type="text" name="q" placeholder="Search products..." value="{{ search.terms }}">
-      <button type="submit">Search</button>
-    </div>
-
-    <div class="filter-section">
-      <h3>Filter Products</h3>
-      {% if collections.all.products.size > 0 %}
-        <div class="price-filter">
-          <h4>Price Range</h4>
-          <select name="sort_by" onchange="this.form.submit()">
-            <option value="manual" {% if collection.sort_by == 'manual' %}selected{% endif %}>Featured</option>
-            <option value="price-ascending" {% if collection.sort_by == 'price-ascending' %}selected{% endif %}>Price: Low to High</option>
-            <option value="price-descending" {% if collection.sort_by == 'price-descending' %}selected{% endif %}>Price: High to Low</option>
-            <option value="title-ascending" {% if collection.sort_by == 'title-ascending' %}selected{% endif %}>Alphabetically: A-Z</option>
-            <option value="title-descending" {% if collection.sort_by == 'title-descending' %}selected{% endif %}>Alphabetically: Z-A</option>
-            <option value="created-ascending" {% if collection.sort_by == 'created-ascending' %}selected{% endif %}>Date: Old to New</option>
-            <option value="created-descending" {% if collection.sort_by == 'created-descending' %}selected{% endif %}>Date: New to Old</option>
-            <option value="best-selling" {% if collection.sort_by == 'best-selling' %}selected{% endif %}>Best Selling</option>
-          </select>
-        </div>
-
-        {% if collections.all.products.first.vendor %}
-          <div class="vendor-filter">
-            <h4>Vendor</h4>
-            <select name="vendor" onchange="this.form.submit()">
-              <option value="">All Vendors</option>
-              {% assign vendors = collections.all.products | map: 'vendor' | uniq %}
-              {% for vendor in vendors %}
-                <option value="{{ vendor | handle }}" {% if current_vendor == vendor %}selected{% endif %}>{{ vendor }}</option>
-              {% endfor %}
-            </select>
-          </div>
-        {% endif %}
-
-        <div class="price-range-filter">
-          <h4>Price Range</h4>
-          <div class="price-inputs">
-            <input type="number" name="price_min" placeholder="Min" value="{{ price_min | default: '' }}" min="0">
-            <span>to</span>
-            <input type="number" name="price_max" placeholder="Max" value="{{ price_max | default: '' }}" min="0">
-            <button type="submit">Apply</button>
-          </div>
-        </div>
-      {% endif %}
-    </div>
+  <form action="{{ routes.search_url }}" method="get" class="search-form">
+    <input type="hidden" name="type" value="product">
+    <input type="text" name="q" placeholder="Search products..." value="{{ search.terms }}">
+    <button type="submit">Search</button>
   </form>
 </div>
 
@@ -57,54 +12,50 @@
   {% paginate collections.all.products by 24 %}
     {% if collections.all.products.size > 0 %}
       {% for product in collections.all.products %}
-        {% if product.price >= price_min or price_min == blank %}
-          {% if product.price <= price_max or price_max == blank %}
-            <div class="product-card">
-              {% comment %}Product Title and Basic Info{% endcomment %}
-              <div class="product-header">
-                <h2><a href="{{ product.url }}">{{ product.title }}</a></h2>
-                <p class="vendor">By {{ product.vendor }}</p>
-              </div>
+        <div class="product-card">
+          {% comment %}Product Title and Basic Info{% endcomment %}
+          <div class="product-header">
+            <h2><a href="{{ product.url }}">{{ product.title }}</a></h2>
+            <p class="vendor">By {{ product.vendor }}</p>
+          </div>
 
-              {% comment %}Product Images{% endcomment %}
-              <div class="product-images">
-                <div class="featured-image">
-                  <h4>Featured:</h4>
-                  <img src="{{ product.featured_image | img_url: '200x' }}" alt="{{ product.title }}" loading="lazy">
-                </div>
-                {% if product.images.size > 1 %}
-                  <div class="gallery-images">
-                    <h4>Gallery:</h4>
-                    {% for image in product.images %}
-                      {% if image != product.featured_image %}
-                        <img src="{{ image | img_url: '100x' }}" alt="{{ product.title }}" loading="lazy">
-                      {% endif %}
-                    {% endfor %}
-                  </div>
-                {% endif %}
-              </div>
-
-              {% comment %}Product Details{% endcomment %}
-              <div class="product-details">
-                <div class="price-section">
-                  <h4>Pricing</h4>
-                  <p class="price">{{ product.price | money }}</p>
-                  {% if product.compare_at_price > product.price %}
-                    <p class="compare-price">{{ product.compare_at_price | money }}</p>
-                    <p class="savings">Save {{ product.compare_at_price | minus: product.price | money }}</p>
-                  {% endif %}
-                </div>
-
-                {% if product.description != blank %}
-                  <div class="description-section">
-                    <h4>Description</h4>
-                    <div class="description">{{ product.description | strip_html | truncatewords: 30 }}</div>
-                  </div>
-                {% endif %}
-              </div>
+          {% comment %}Product Images{% endcomment %}
+          <div class="product-images">
+            <div class="featured-image">
+              <h4>Featured:</h4>
+              <img src="{{ product.featured_image | img_url: '200x' }}" alt="{{ product.title }}" loading="lazy">
             </div>
-          {% endif %}
-        {% endif %}
+            {% if product.images.size > 1 %}
+              <div class="gallery-images">
+                <h4>Gallery:</h4>
+                {% for image in product.images %}
+                  {% if image != product.featured_image %}
+                    <img src="{{ image | img_url: '100x' }}" alt="{{ product.title }}" loading="lazy">
+                  {% endif %}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+
+          {% comment %}Product Details{% endcomment %}
+          <div class="product-details">
+            <div class="price-section">
+              <h4>Pricing</h4>
+              <p class="price">{{ product.price | money }}</p>
+              {% if product.compare_at_price > product.price %}
+                <p class="compare-price">{{ product.compare_at_price | money }}</p>
+                <p class="savings">Save {{ product.compare_at_price | minus: product.price | money }}</p>
+              {% endif %}
+            </div>
+
+            {% if product.description != blank %}
+              <div class="description-section">
+                <h4>Description</h4>
+                <div class="description">{{ product.description | strip_html | truncatewords: 30 }}</div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
       {% endfor %}
     {% else %}
       <p>No products found in this collection.</p>
