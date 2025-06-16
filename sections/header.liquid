@@ -19,22 +19,6 @@
               {{ section.settings.top_bar_text }}
             </div>
           {% endif %}
-          <div class="top-bar-links">
-            {% if section.settings.show_currency_selector %}
-              <div class="currency-selector">
-                {% form 'currency' %}
-                  {{ form | currency_selector }}
-                {% endform %}
-              </div>
-            {% endif %}
-            {% if section.settings.show_language_selector %}
-              <div class="language-selector">
-                {% form 'localization' %}
-                  {{ form | language_selector }}
-                {% endform %}
-              </div>
-            {% endif %}
-          </div>
         </div>
       </div>
     {% endif %}
@@ -67,18 +51,15 @@
 
       <!-- Main Navigation -->
       <nav class="main-nav">
-        {% for link in linklists[section.settings.main_menu].links %}
-          <div class="nav-item{% if link.links != blank %} has-dropdown{% endif %}">
-            <a href="{{ link.url }}" class="nav-link">{{ link.title }}</a>
-            {% if link.links != blank %}
-              <div class="dropdown-menu">
-                {% for childlink in link.links %}
-                  <a href="{{ childlink.url }}" class="dropdown-item">{{ childlink.title }}</a>
-                {% endfor %}
-              </div>
-            {% endif %}
+          <div class="nav-item">
+            <a href="/" class="nav-link">Home</a>
           </div>
-        {% endfor %}
+
+        {% if section.settings.show_shop_link %}
+          <div class="nav-item">
+            <a href="/pages/shop" class="nav-link">Shop</a>
+          </div>
+        {% endif %}
         
         <!-- Additional Static Links -->
         {% if section.settings.show_about_link %}
@@ -93,169 +74,13 @@
           </div>
         {% endif %}
       </nav>
-
-      <!-- Header Actions -->
-      <div class="header-actions">
-        <!-- Search -->
-        {% if section.settings.show_search %}
-          <div class="search-toggle">
-            <button aria-label="Search">
-              <i class="fas fa-search"></i>
-            </button>
-          </div>
-        {% endif %}
-
-        <!-- Account -->
-        {% if section.settings.show_account %}
-          <div class="account-link">
-            <a href="/account">
-              <i class="fas fa-user"></i>
-            </a>
-          </div>
-        {% endif %}
-
-        <!-- Wishlist -->
-        {% if section.settings.show_wishlist %}
-          <div class="wishlist-link">
-            <a href="/pages/wishlist">
-              <i class="fas fa-heart"></i>
-            </a>
-          </div>
-        {% endif %}
-
-        <!-- Cart -->
-        {% if section.settings.show_cart %}
-          <div class="cart-link">
-            <a href="/cart" class="cart-icon">
-              <i class="fas fa-shopping-cart"></i>
-              <span class="cart-count">{{ cart.item_count }}</span>
-            </a>
-          </div>
-        {% endif %}
-      </div>
     </div>
-
-    <!-- Search Bar -->
-    {% if section.settings.show_search %}
-      <div class="search-bar">
-        <form action="/search" method="get" role="search">
-          <input type="search" name="q" placeholder="{{ section.settings.search_placeholder }}">
-          <button type="submit">
-            <i class="fas fa-search"></i>
-          </button>
-        </form>
-      </div>
-    {% endif %}
   </div>
 </header>
 
 {% schema %}
 {
   "name": "Header",
-  "settings": [
-    {
-      "type": "header",
-      "content": "Top Bar"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_top_bar",
-      "label": "Show Top Bar",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "top_bar_text",
-      "label": "Top Bar Text",
-      "default": "Free shipping on orders over $50"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_currency_selector",
-      "label": "Show Currency Selector",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_language_selector",
-      "label": "Show Language Selector",
-      "default": true
-    },
-    {
-      "type": "header",
-      "content": "Logo"
-    },
-    {
-      "type": "image_picker",
-      "id": "logo",
-      "label": "Logo"
-    },
-    {
-      "type": "range",
-      "id": "logo_width",
-      "min": 50,
-      "max": 300,
-      "step": 10,
-      "unit": "px",
-      "label": "Logo Width",
-      "default": 150
-    },
-    {
-      "type": "header",
-      "content": "Navigation"
-    },
-    {
-      "type": "link_list",
-      "id": "main_menu",
-      "label": "Main Menu",
-      "default": "main-menu"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_about_link",
-      "label": "Show About Link",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_contact_link",
-      "label": "Show Contact Link",
-      "default": true
-    },
-    {
-      "type": "header",
-      "content": "Header Actions"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_search",
-      "label": "Show Search",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "search_placeholder",
-      "label": "Search Placeholder",
-      "default": "Search products..."
-    },
-    {
-      "type": "checkbox",
-      "id": "show_account",
-      "label": "Show Account",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_wishlist",
-      "label": "Show Wishlist",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_cart",
-      "label": "Show Cart",
-      "default": true
-    }
-  ]
+  "settings": []
 }
 {% endschema %}
