@@ -4,7 +4,7 @@
     {% for product in collections.all.products %}
       <li>
         <a href="{{ product.url }}">{{ product.title }}</a> - {{ product.price | money }} - 
-        {% for image in product.images %} {{  <img src="{{ image.src }}" width="50" height="60"> | product_img_url: 'grande' }} {% endfor %}
+        {% for image in product.images %} <img src="{{ image.src }}" width="50" height="60"> | product_img_url: 'grande' {% else %} <p>No Image provided</p> {% endfor %}
       </li>
     {% else %}
       <li>No products found.</li>
