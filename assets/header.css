@@ -1,167 +1,525 @@
-/* Header Styles */
+/* ==========================================================================
+   HEADER STYLES - Complete Shopify Header Component
+   ========================================================================== */
+
+/* Site Header Base */
 .site-header {
   background: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
   z-index: 1000;
+  width: 100%;
+  transition: all 0.3s ease;
 }
 
 .header-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 15px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* Logo */
-.header-logo {
-  flex: 0 0 auto;
-}
-
-.header-logo img {
-  max-height: 50px;
-  width: auto;
-}
-
-/* Navigation */
-.header-nav {
-  flex: 1;
-  margin: 0 30px;
-}
-
-.nav-list {
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.nav-item a {
-  color: #333;
-  text-decoration: none;
-  font-size: 1rem;
-  font-weight: 500;
-  padding: 5px 0;
-  position: relative;
-}
-
-.nav-item a::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: #000;
-  transition: width 0.3s ease;
-}
-
-.nav-item a:hover::after {
   width: 100%;
 }
 
-/* Header Actions */
+/* ==========================================================================
+     TOP BAR STYLES
+     ========================================================================== */
+
+.top-bar {
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  padding: 8px 0;
+  font-size: 12px;
+}
+
+.top-bar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.top-bar-text {
+  color: #666;
+  font-weight: 500;
+}
+
+.top-bar-links {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.currency-selector,
+.language-selector {
+  position: relative;
+}
+
+.currency-selector select,
+.language-selector select {
+  background: transparent;
+  border: none;
+  color: #666;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+.currency-selector select:hover,
+.language-selector select:hover {
+  background: #e9ecef;
+}
+
+/* ==========================================================================
+     MAIN HEADER STYLES
+     ========================================================================== */
+
+.main-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 20px;
+  position: relative;
+}
+
+/* Header Left Section */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Mobile Menu Toggle */
+.mobile-menu-toggle {
+  display: none;
+  flex-direction: column;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  width: 30px;
+  height: 30px;
+  justify-content: space-between;
+}
+
+.mobile-menu-toggle span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background: #333;
+  border-radius: 1px;
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-toggle:hover span {
+  background: #000;
+}
+
+.mobile-menu-toggle.active span:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+
+.mobile-menu-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-menu-toggle.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Logo Styles */
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo a {
+  display: block;
+  text-decoration: none;
+}
+
+.logo img {
+  max-height: 60px;
+  width: auto;
+  transition: transform 0.3s ease;
+}
+
+.logo img:hover {
+  transform: scale(1.05);
+}
+
+.site-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.site-title:hover {
+  color: #007bff;
+}
+
+/* ==========================================================================
+     NAVIGATION STYLES
+     ========================================================================== */
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.nav-item {
+  position: relative;
+}
+
+.nav-link {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 16px;
+  padding: 10px 0;
+  transition: color 0.3s ease;
+  display: block;
+}
+
+.nav-link:hover {
+  color: #007bff;
+}
+
+/* Dropdown Menu */
+.nav-item.has-dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  min-width: 200px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  padding: 10px 0;
+}
+
+.dropdown-item {
+  display: block;
+  padding: 12px 20px;
+  color: #333;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.dropdown-item:hover {
+  background: #f8f9fa;
+  color: #007bff;
+  padding-left: 25px;
+}
+
+/* ==========================================================================
+     HEADER ACTIONS STYLES
+     ========================================================================== */
+
 .header-actions {
   display: flex;
   align-items: center;
   gap: 20px;
 }
 
-.header-action {
+.search-toggle,
+.account-link,
+.wishlist-link,
+.cart-link {
+  position: relative;
+}
+
+.search-toggle button,
+.account-link a,
+.wishlist-link a,
+.cart-link a {
   color: #333;
   text-decoration: none;
-  font-size: 1.2rem;
+  font-size: 18px;
+  padding: 10px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-toggle button:hover,
+.account-link a:hover,
+.wishlist-link a:hover,
+.cart-link a:hover {
+  background: #f8f9fa;
+  color: #007bff;
+  transform: scale(1.1);
+}
+
+/* Cart Icon with Count */
+.cart-icon {
   position: relative;
 }
 
 .cart-count {
   position: absolute;
-  top: -8px;
-  right: -8px;
-  background: #000;
-  color: #fff;
-  font-size: 0.7rem;
-  padding: 2px 6px;
-  border-radius: 10px;
-  min-width: 18px;
-  text-align: center;
+  top: -5px;
+  right: -5px;
+  background: #dc3545;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  min-width: 20px;
 }
 
-/* Mobile Menu Button */
-.mobile-menu-button {
+/* ==========================================================================
+     SEARCH BAR STYLES
+     ========================================================================== */
+
+.search-bar {
+  background: #f8f9fa;
+  padding: 15px 20px;
+  border-top: 1px solid #e9ecef;
   display: none;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  padding: 5px;
 }
 
-/* Responsive Design */
+.search-bar.active {
+  display: block;
+  animation: slideDown 0.3s ease;
+}
+
+.search-bar form {
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.search-bar input[type="search"] {
+  width: 100%;
+  padding: 12px 50px 12px 20px;
+  border: 2px solid #e9ecef;
+  border-radius: 25px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.search-bar input[type="search"]:focus {
+  border-color: #007bff;
+}
+
+.search-bar button[type="submit"] {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.search-bar button[type="submit"]:hover {
+  background: #0056b3;
+}
+
+/* ==========================================================================
+     RESPONSIVE STYLES
+     ========================================================================== */
+
+/* Tablet Styles */
 @media (max-width: 768px) {
-  .header-nav {
-    display: none;
+  .top-bar-content {
+    padding: 0 15px;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
   }
 
-  .mobile-menu-button {
-    display: block;
+  .main-header {
+    padding: 15px;
+  }
+
+  .mobile-menu-toggle {
+    display: flex;
+  }
+
+  .main-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    flex-direction: column;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    gap: 0;
+  }
+
+  .main-nav.active {
+    display: flex;
+    animation: slideDown 0.3s ease;
+  }
+
+  .nav-item {
+    width: 100%;
+    border-bottom: 1px solid #e9ecef;
+  }
+
+  .nav-item:last-child {
+    border-bottom: none;
+  }
+
+  .nav-link {
+    padding: 15px 0;
+    font-size: 18px;
+  }
+
+  .dropdown-menu {
+    position: static;
+    box-shadow: none;
+    background: #f8f9fa;
+    margin-top: 10px;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    border-radius: 0;
   }
 
   .header-actions {
     gap: 15px;
   }
+
+  .logo img {
+    max-height: 50px;
+  }
+
+  .site-title {
+    font-size: 20px;
+  }
 }
 
-/* Mobile Menu */
-.mobile-menu {
-  display: none;
+/* Mobile Styles */
+@media (max-width: 480px) {
+  .top-bar {
+    display: none;
+  }
+
+  .main-header {
+    padding: 10px 15px;
+  }
+
+  .header-actions {
+    gap: 10px;
+  }
+
+  .search-toggle button,
+  .account-link a,
+  .wishlist-link a,
+  .cart-link a {
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+  }
+
+  .logo img {
+    max-height: 40px;
+  }
+
+  .site-title {
+    font-size: 18px;
+  }
+
+  .search-bar {
+    padding: 10px 15px;
+  }
+
+  .search-bar input[type="search"] {
+    padding: 10px 40px 10px 15px;
+    font-size: 14px;
+  }
+
+  .search-bar button[type="submit"] {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* ==========================================================================
+     ANIMATIONS
+     ========================================================================== */
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================================
+     UTILITY CLASSES
+     ========================================================================== */
+
+.header-sticky {
   position: fixed;
   top: 0;
-  left: 0;
   width: 100%;
-  height: 100%;
-  background: #fff;
-  z-index: 1001;
-  padding: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
 }
 
-.mobile-menu.active {
-  display: block;
+.header-hidden {
+  transform: translateY(-100%);
 }
 
-.mobile-menu-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
+/* ==========================================================================
+     FOCUS STATES FOR ACCESSIBILITY
+     ========================================================================== */
+
+.nav-link:focus,
+.search-toggle button:focus,
+.account-link a:focus,
+.wishlist-link a:focus,
+.cart-link a:focus,
+.dropdown-item:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
 }
 
-.mobile-menu-close {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
-.mobile-nav-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.mobile-nav-item {
-  margin: 15px 0;
-}
-
-.mobile-nav-item a {
-  color: #333;
-  text-decoration: none;
-  font-size: 1.2rem;
-  display: block;
-  padding: 10px 0;
+.mobile-menu-toggle:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+  border-radius: 4px;
 }
