@@ -3,7 +3,8 @@
   <ul>
     {% for product in collections.all.products %}
       <li>
-        <a href="{{ product.url }}">{{ product.title }}</a> - {{ product.price | money }}
+        <a href="{{ product.url }}">{{ product.title }}</a> - {{ product.price | money }} - 
+        {% for image in product.images %} {{ image.src | product_img_url: 'grande' }} {% endfor %}
       </li>
     {% else %}
       <li>No products found.</li>
