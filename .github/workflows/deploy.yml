@@ -1,16 +1,10 @@
-name: Deploy Shopify Theme
+name: Deploy Shopify Theme (Debug)
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch: # Allows manual triggering
-    inputs:
-      publish_theme:
-        description: "Publish theme after push?"
-        required: false
-        default: "true"
-        type: boolean
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -18,28 +12,40 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4 # Updated to latest version
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4 # Updated to latest version
+        uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm" # Cache npm dependencies for faster builds
 
       - name: Install Shopify CLI
-        run: npm install -g @shopify/cli@latest
-
-      - name: Validate Environment Variables
         run: |
-          if [ -z "$SHOPIFY_STORE_URL" ] || [ -z "$SHOPIFY_API_PASSWORD" ] || [ -z "$SHOPIFY_THEME_ID" ]; then
-            echo "Error: Missing required environment variables"
-            echo "Required: SHOPIFY_STORE_URL, SHOPIFY_API_PASSWORD, SHOPIFY_THEME_ID"
-            exit 1
-          fi
+          echo "📦 Installing Shopify CLI..."
+          npm install -g @shopify/cli@latest
+          echo "✅ Shopify CLI version:"
+          shopify version
+
+      - name: Debug - List theme files
+        run: |
+          echo "📁 Repository contents:"
+          ls -la
+          echo "📁 Checking for theme structure:"
+          ls -la templates/ || echo "No templates folder"
+          ls -la assets/ || echo "No assets folder"
+          ls -la sections/ || echo "No sections folder"
+
+      - name: Test Shopify Connection
         env:
           SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
           SHOPIFY_API_PASSWORD: ${{ secrets.SHOPIFY_API_PASSWORD }}
-          SHOPIFY_THEME_ID: ${{ secrets.SHOPIFY_THEME_ID }}
+        run: |
+          echo "🔍 Testing connection to Shopify..."
+          echo "Store URL: $SHOPIFY_STORE_URL"
+          shopify theme list --store "$SHOPIFY_STORE_URL" --password "$SHOPIFY_API_PASSWORD" || {
+            echo "❌ Failed to connect to Shopify. Check your store URL and password."
+            exit 1
+          }
 
       - name: Push Theme to Shopify
         env:
@@ -52,39 +58,21 @@ jobs:
           echo "Theme ID: $SHOPIFY_THEME_ID"
 
           shopify theme push \
-            --store="$SHOPIFY_STORE_URL" \
-            --password="$SHOPIFY_API_PASSWORD" \
-            --theme="$SHOPIFY_THEME_ID" \
+            --store "$SHOPIFY_STORE_URL" \
+            --password "$SHOPIFY_API_PASSWORD" \
+            --theme "$SHOPIFY_THEME_ID" \
             --allow-live \
-            --json
+            --verbose
 
       - name: Publish Shopify Theme
-        if: ${{ github.event.inputs.publish_theme != 'false' }} # Skip if manually set to false
         env:
           SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
           SHOPIFY_API_PASSWORD: ${{ secrets.SHOPIFY_API_PASSWORD }}
           SHOPIFY_THEME_ID: ${{ secrets.SHOPIFY_THEME_ID }}
         run: |
           echo "🎉 Publishing theme..."
-          echo "Theme ID: $SHOPIFY_THEME_ID will be set as live theme"
-
           shopify theme publish \
-            --store="$SHOPIFY_STORE_URL" \
-            --password="$SHOPIFY_API_PASSWORD" \
-            --theme="$SHOPIFY_THEME_ID" \
+            --store "$SHOPIFY_STORE_URL" \
+            --password "$SHOPIFY_API_PASSWORD" \
+            --theme "$SHOPIFY_THEME_ID" \
             --force
-
-      - name: Deployment Success
-        if: success()
-        run: |
-          echo "✅ Theme deployment completed successfully!"
-          echo "🌐 Your theme is now live at: https://$SHOPIFY_STORE_URL"
-        env:
-          SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
-
-      - name: Deployment Failed
-        if: failure()
-        run: |
-          echo "❌ Theme deployment failed!"
-          echo "Please check the logs above for error details."
-          exit 1
