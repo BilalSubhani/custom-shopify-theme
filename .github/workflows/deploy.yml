@@ -3,7 +3,7 @@ name: Deploy Shopify Theme
 on:
   push:
     branches:
-      - main # Or your target branch
+      - main
 
 jobs:
   deploy:
@@ -25,5 +25,5 @@ jobs:
           shopify theme push \
             --store=$SHOPIFY_STORE_URL \
             --password=$SHOPIFY_API_PASSWORD \
-            --theme=$SHOPIFY_THEME_ID \
+            --theme-id=$SHOPIFY_THEME_ID \
             --live
