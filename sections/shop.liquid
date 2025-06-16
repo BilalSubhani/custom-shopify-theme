@@ -1,72 +1,82 @@
-{% comment %}Search and Filter Section{% endcomment %}
-<div class="shop-controls">
-  <form action="{{ routes.search_url }}" method="get" class="search-form">
-    <input type="hidden" name="type" value="product">
-    <input type="text" name="q" placeholder="Search products..." value="{{ search.terms }}">
-    <button type="submit">Search</button>
-  </form>
-</div>
+{{ 'shop.css' | asset_url | stylesheet_tag }}
 
-{% comment %}Products Display Section{% endcomment %}
-<div class="products-grid">
-  {% paginate collections.all.products by 24 %}
-    {% if collections.all.products.size > 0 %}
-      {% for product in collections.all.products %}
-        <div class="product-card">
-          {% comment %}Product Title and Basic Info{% endcomment %}
-          <div class="product-header">
-            <h2><a href="{{ product.url }}">{{ product.title }}</a></h2>
-            <p class="vendor">By {{ product.vendor }}</p>
-          </div>
+{% comment %}Main Container{% endcomment %}
+<div class="shop-container">
+  {% comment %}Search Section{% endcomment %}
+  <div class="search-section">
+    <form action="{{ routes.search_url }}" method="get" class="search-form">
+      <input type="hidden" name="type" value="product">
+      <input type="text" name="q" placeholder="Search products..." value="{{ search.terms }}">
+      <button type="submit">Search</button>
+    </form>
+  </div>
 
-          {% comment %}Product Images{% endcomment %}
-          <div class="product-images">
-            <div class="featured-image">
-              <h4>Featured:</h4>
-              <img src="{{ product.featured_image | img_url: '200x' }}" alt="{{ product.title }}" loading="lazy">
-            </div>
-            {% if product.images.size > 1 %}
-              <div class="gallery-images">
-                <h4>Gallery:</h4>
-                {% for image in product.images %}
-                  {% if image != product.featured_image %}
-                    <img src="{{ image | img_url: '100x' }}" alt="{{ product.title }}" loading="lazy">
+  {% comment %}Main Content Row{% endcomment %}
+  <div class="shop-row">
+    {% comment %}Left Sidebar - Filters (3 columns){% endcomment %}
+    <div class="filters-sidebar">
+      <h3>Filters</h3>
+      {% comment %}Filter content will be added here later{% endcomment %}
+    </div>
+
+    {% comment %}Right Content - Products (9 columns){% endcomment %}
+    <div class="products-content">
+      {% if collections.all.products.size > 0 %}
+        <div class="products-grid">
+          {% for product in collections.all.products %}
+            <div class="product-card">
+              {% comment %}Product Title and Basic Info{% endcomment %}
+              <div class="product-header">
+                <h2><a href="{{ product.url }}">{{ product.title }}</a></h2>
+                <p class="vendor">By {{ product.vendor }}</p>
+              </div>
+
+              {% comment %}Product Images{% endcomment %}
+              <div class="product-images">
+                <div class="featured-image">
+                  <img src="{{ product.featured_image | img_url: '200x' }}" alt="{{ product.title }}" loading="lazy">
+                </div>
+                {% if product.images.size > 1 %}
+                  <div class="gallery-images">
+                    {% for image in product.images %}
+                      {% if image != product.featured_image %}
+                        <img src="{{ image | img_url: '100x' }}" alt="{{ product.title }}" loading="lazy">
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+
+              {% comment %}Product Details{% endcomment %}
+              <div class="product-details">
+                <div class="price-section">
+                  <p class="price">{{ product.price | money }}</p>
+                  {% if product.compare_at_price > product.price %}
+                    <p class="compare-price">{{ product.compare_at_price | money }}</p>
+                    <p class="savings">Save {{ product.compare_at_price | minus: product.price | money }}</p>
                   {% endif %}
-                {% endfor %}
-              </div>
-            {% endif %}
-          </div>
+                </div>
 
-          {% comment %}Product Details{% endcomment %}
-          <div class="product-details">
-            <div class="price-section">
-              <h4>Pricing</h4>
-              <p class="price">{{ product.price | money }}</p>
-              {% if product.compare_at_price > product.price %}
-                <p class="compare-price">{{ product.compare_at_price | money }}</p>
-                <p class="savings">Save {{ product.compare_at_price | minus: product.price | money }}</p>
-              {% endif %}
+                {% if product.description != blank %}
+                  <div class="description-section">
+                    <div class="description">{{ product.description | strip_html | truncatewords: 30 }}</div>
+                  </div>
+                {% endif %}
+              </div>
             </div>
-
-            {% if product.description != blank %}
-              <div class="description-section">
-                <h4>Description</h4>
-                <div class="description">{{ product.description | strip_html | truncatewords: 30 }}</div>
-              </div>
-            {% endif %}
-          </div>
+          {% endfor %}
         </div>
-      {% endfor %}
-    {% else %}
-      <p>No products found in this collection.</p>
-    {% endif %}
 
-    {% if paginate.pages > 1 %}
-      <div class="pagination">
-        {{ paginate | default_pagination }}
-      </div>
-    {% endif %}
-  {% endpaginate %}
+        {% if paginate.pages > 1 %}
+          <div class="pagination">
+            {{ paginate | default_pagination }}
+          </div>
+        {% endif %}
+      {% else %}
+        <p>No products found in this collection.</p>
+      {% endif %}
+    </div>
+  </div>
 </div>
 
 {% schema %}
