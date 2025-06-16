@@ -1,3 +1,5 @@
+{{ 'footer.css' | asset_url | stylesheet_tag }}
+
 <footer>
   <p>&copy; {{ 'now' | date: "%Y" }} {{ shop.name }}. All rights reserved.</p>
 </footer>
