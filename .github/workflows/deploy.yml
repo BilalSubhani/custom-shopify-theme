@@ -21,7 +21,7 @@ jobs:
 
       - name: Install Shopify CLI
         run: |
-          npm install -g @shopify/cli @shopify/theme
+          npm install -g @shopify/cli
 
       - name: Authenticate & Push Theme
         env:
