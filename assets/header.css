@@ -1,0 +1,167 @@
+/* Header Styles */
+.site-header {
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Logo */
+.header-logo {
+  flex: 0 0 auto;
+}
+
+.header-logo img {
+  max-height: 50px;
+  width: auto;
+}
+
+/* Navigation */
+.header-nav {
+  flex: 1;
+  margin: 0 30px;
+}
+
+.nav-list {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-item a {
+  color: #333;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 5px 0;
+  position: relative;
+}
+
+.nav-item a::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #000;
+  transition: width 0.3s ease;
+}
+
+.nav-item a:hover::after {
+  width: 100%;
+}
+
+/* Header Actions */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.header-action {
+  color: #333;
+  text-decoration: none;
+  font-size: 1.2rem;
+  position: relative;
+}
+
+.cart-count {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #000;
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* Mobile Menu Button */
+.mobile-menu-button {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 5px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .header-nav {
+    display: none;
+  }
+
+  .mobile-menu-button {
+    display: block;
+  }
+
+  .header-actions {
+    gap: 15px;
+  }
+}
+
+/* Mobile Menu */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  z-index: 1001;
+  padding: 20px;
+}
+
+.mobile-menu.active {
+  display: block;
+}
+
+.mobile-menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.mobile-menu-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.mobile-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mobile-nav-item {
+  margin: 15px 0;
+}
+
+.mobile-nav-item a {
+  color: #333;
+  text-decoration: none;
+  font-size: 1.2rem;
+  display: block;
+  padding: 10px 0;
+}
