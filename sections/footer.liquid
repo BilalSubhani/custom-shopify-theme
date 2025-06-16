@@ -1,12 +1,195 @@
-{{ 'footer.css' | asset_url | stylesheet_tag }}
 
-<footer>
-  <p>&copy; {{ 'now' | date: "%Y" }} {{ shop.name }}. All rights reserved.</p>
+
+{%- style -%}
+  .site-footer {
+    background: #f8f8f8;
+    padding: 60px 0 30px;
+    margin-top: 60px;
+  }
+{%- endstyle -%}
+
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-grid">
+      <!-- About Column -->
+      <div class="footer-column">
+        <h3>{{ section.settings.about_title }}</h3>
+        <div class="footer-about">
+          {{ section.settings.about_text }}
+        </div>
+        {% if section.settings.show_social_links %}
+          <div class="social-links">
+            {% if settings.social_facebook_link != blank %}
+              <a href="{{ settings.social_facebook_link }}" class="social-link" target="_blank" rel="noopener">
+                <i class="fab fa-facebook"></i>
+              </a>
+            {% endif %}
+            {% if settings.social_twitter_link != blank %}
+              <a href="{{ settings.social_twitter_link }}" class="social-link" target="_blank" rel="noopener">
+                <i class="fab fa-twitter"></i>
+              </a>
+            {% endif %}
+            {% if settings.social_instagram_link != blank %}
+              <a href="{{ settings.social_instagram_link }}" class="social-link" target="_blank" rel="noopener">
+                <i class="fab fa-instagram"></i>
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Quick Links Column -->
+      <div class="footer-column">
+        <h3>{{ section.settings.quick_links_title }}</h3>
+        <ul class="footer-links">
+          {% for link in linklists[section.settings.quick_links_menu].links %}
+            <li>
+              <a href="{{ link.url }}">{{ link.title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <!-- Customer Service Column -->
+      <div class="footer-column">
+        <h3>{{ section.settings.customer_service_title }}</h3>
+        <ul class="footer-links">
+          {% for link in linklists[section.settings.customer_service_menu].links %}
+            <li>
+              <a href="{{ link.url }}">{{ link.title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <!-- Newsletter Column -->
+      <div class="footer-column">
+        <h3>{{ section.settings.newsletter_title }}</h3>
+        <div class="newsletter-section">
+          {% form 'customer', id: 'footer-newsletter-form' %}
+            <div class="newsletter-form">
+              <input type="email" name="contact[email]" placeholder="{{ section.settings.newsletter_placeholder }}" required>
+              <button type="submit">{{ section.settings.newsletter_button_text }}</button>
+            </div>
+            {% if form.posted_successfully? %}
+              <p class="newsletter-success">{{ 'general.newsletter_form.confirmation' | t }}</p>
+            {% endif %}
+          {% endform %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Footer -->
+    <div class="footer-bottom">
+      <div class="footer-bottom-content">
+        <div class="copyright">
+          &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ section.settings.copyright_text }}
+        </div>
+        <ul class="footer-bottom-links">
+          {% for link in linklists[section.settings.bottom_menu].links %}
+            <li>
+              <a href="{{ link.url }}">{{ link.title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
 </footer>
 
 {% schema %}
 {
   "name": "Footer",
-  "settings": []
+  "settings": [
+    {
+      "type": "header",
+      "content": "About Section"
+    },
+    {
+      "type": "text",
+      "id": "about_title",
+      "label": "About Title",
+      "default": "About Us"
+    },
+    {
+      "type": "richtext",
+      "id": "about_text",
+      "label": "About Text",
+      "default": "<p>Share information about your store and brand.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social_links",
+      "label": "Show Social Links",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Quick Links"
+    },
+    {
+      "type": "text",
+      "id": "quick_links_title",
+      "label": "Quick Links Title",
+      "default": "Quick Links"
+    },
+    {
+      "type": "link_list",
+      "id": "quick_links_menu",
+      "label": "Quick Links Menu"
+    },
+    {
+      "type": "header",
+      "content": "Customer Service"
+    },
+    {
+      "type": "text",
+      "id": "customer_service_title",
+      "label": "Customer Service Title",
+      "default": "Customer Service"
+    },
+    {
+      "type": "link_list",
+      "id": "customer_service_menu",
+      "label": "Customer Service Menu"
+    },
+    {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_title",
+      "label": "Newsletter Title",
+      "default": "Newsletter"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_placeholder",
+      "label": "Newsletter Placeholder",
+      "default": "Enter your email"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_button_text",
+      "label": "Newsletter Button Text",
+      "default": "Subscribe"
+    },
+    {
+      "type": "header",
+      "content": "Bottom Footer"
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Copyright Text",
+      "default": "All rights reserved."
+    },
+    {
+      "type": "link_list",
+      "id": "bottom_menu",
+      "label": "Bottom Menu"
+    }
+  ]
 }
 {% endschema %}
