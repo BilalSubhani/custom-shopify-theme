@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-search"
+    },
+    "banner": {
+      "type": "search-banner"
+    }
+  },
+  "order": ["banner", "main"]
+}
