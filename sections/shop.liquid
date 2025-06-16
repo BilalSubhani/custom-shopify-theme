@@ -2,10 +2,25 @@
   <h1>All Products</h1>
   <ul>
     {% for product in collections.all.products %}
-      <li>
-        <a href="{{ product.url }}">{{ product.title }}</a> - {{ product.price | money }} - 
+      <li class="product-item">
+        <a href="{{ product.url }}">{{ product.title }}</a> - {{ product.price | money }}
         {% if product.images.size > 0 %}
-          <img src="{{ product.featured_image | img_url: '100x' }}" alt="{{ product.title }}" loading="lazy">
+          <div class="product-images">
+            <div class="featured-image">
+              <h6>Featured:</h6>
+              <img src="{{ product.featured_image | img_url: '200x' }}" alt="{{ product.title }}" loading="lazy">
+            </div>
+            {% if product.images.size > 1 %}
+              <div class="gallery-images">
+                <h6>Gallery:</h6>
+                {% for image in product.images %}
+                  {% if image != product.featured_image %}
+                    <img src="{{ image | img_url: '100x' }}" alt="{{ product.title }}" loading="lazy">
+                  {% endif %}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
         {% else %}
           <p>No Image provided</p>
         {% endif %}
