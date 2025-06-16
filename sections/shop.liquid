@@ -1,34 +1,159 @@
-<div>
-  <h1>All Products</h1>
-  <ul>
+{% comment %}Search and Filter Section{% endcomment %}
+<div class="shop-controls">
+  <form action="{{ routes.search_url }}" method="get" class="search-form">
+    <input type="hidden" name="type" value="product">
+    <input type="text" name="q" placeholder="Search products..." value="{{ search.terms }}">
+    <button type="submit">Search</button>
+  </form>
+
+  <div class="filter-section">
+    <h3>Filter Products</h3>
+    {% if collections.all.products.size > 0 %}
+      <div class="price-filter">
+        <h4>Price Range</h4>
+        <select name="price_filter" onchange="this.form.submit()">
+          <option value="">All Prices</option>
+          <option value="price_asc">Price: Low to High</option>
+          <option value="price_desc">Price: High to Low</option>
+        </select>
+      </div>
+
+      <div class="availability-filter">
+        <h4>Availability</h4>
+        <select name="availability" onchange="this.form.submit()">
+          <option value="">All Products</option>
+          <option value="in_stock">In Stock</option>
+          <option value="out_of_stock">Out of Stock</option>
+        </select>
+      </div>
+
+      {% if collections.all.products.first.vendor %}
+        <div class="vendor-filter">
+          <h4>Vendor</h4>
+          <select name="vendor" onchange="this.form.submit()">
+            <option value="">All Vendors</option>
+            {% assign vendors = collections.all.products | map: 'vendor' | uniq %}
+            {% for vendor in vendors %}
+              <option value="{{ vendor }}">{{ vendor }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+
+{% comment %}Products Display Section{% endcomment %}
+<div class="products-grid">
+  {% paginate collections.all.products by 24 %}
     {% for product in collections.all.products %}
-      <li class="product-item">
-        <a href="{{ product.url }}">{{ product.title }}</a> - {{ product.price | money }}
-        {% if product.images.size > 0 %}
-          <div class="product-images">
-            <div class="featured-image">
-              <h6>Featured:</h6>
-              <img src="{{ product.featured_image | img_url: '200x' }}" alt="{{ product.title }}" loading="lazy">
+      <div class="product-card">
+        {% comment %}Product Title and Basic Info{% endcomment %}
+        <div class="product-header">
+          <h2><a href="{{ product.url }}">{{ product.title }}</a></h2>
+          <p class="vendor">By {{ product.vendor }}</p>
+        </div>
+
+        {% comment %}Product Images{% endcomment %}
+        <div class="product-images">
+          <div class="featured-image">
+            <h4>Featured:</h4>
+            <img src="{{ product.featured_image | img_url: '200x' }}" alt="{{ product.title }}" loading="lazy">
+          </div>
+          {% if product.images.size > 1 %}
+            <div class="gallery-images">
+              <h4>Gallery:</h4>
+              {% for image in product.images %}
+                {% if image != product.featured_image %}
+                  <img src="{{ image | img_url: '100x' }}" alt="{{ product.title }}" loading="lazy">
+                {% endif %}
+              {% endfor %}
             </div>
-            {% if product.images.size > 1 %}
-              <div class="gallery-images">
-                <h6>Gallery:</h6>
-                {% for image in product.images %}
-                  {% if image != product.featured_image %}
-                    <img src="{{ image | img_url: '100x' }}" alt="{{ product.title }}" loading="lazy">
-                  {% endif %}
-                {% endfor %}
-              </div>
+          {% endif %}
+        </div>
+
+        {% comment %}Product Details{% endcomment %}
+        <div class="product-details">
+          <div class="price-section">
+            <h4>Pricing</h4>
+            <p class="price">{{ product.price | money }}</p>
+            {% if product.compare_at_price > product.price %}
+              <p class="compare-price">{{ product.compare_at_price | money }}</p>
+              <p class="savings">Save {{ product.compare_at_price | minus: product.price | money }}</p>
             {% endif %}
           </div>
-        {% else %}
-          <p>No Image provided</p>
-        {% endif %}
-      </li>
-    {% else %}
-      <li>No products found.</li>
+
+          <div class="availability-section">
+            <h4>Availability</h4>
+            {% if product.available %}
+              <p class="in-stock">In Stock</p>
+              {% if product.inventory_quantity > 0 %}
+                <p>Quantity: {{ product.inventory_quantity }}</p>
+              {% endif %}
+            {% else %}
+              <p class="out-of-stock">Out of Stock</p>
+            {% endif %}
+          </div>
+
+          {% if product.variants.size > 1 %}
+            <div class="variants-section">
+              <h4>Options</h4>
+              {% for option in product.options_with_values %}
+                <div class="option">
+                  <p>{{ option.name }}: {{ option.values | join: ', ' }}</p>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          {% if product.description != blank %}
+            <div class="description-section">
+              <h4>Description</h4>
+              <div class="description">{{ product.description | strip_html | truncatewords: 30 }}</div>
+            </div>
+          {% endif %}
+
+          {% if product.tags.size > 0 %}
+            <div class="tags-section">
+              <h4>Tags</h4>
+              <div class="tags">
+                {% for tag in product.tags %}
+                  <span class="tag">{{ tag }}</span>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+
+          {% if product.metafields.custom.specifications != blank %}
+            <div class="specifications-section">
+              <h4>Specifications</h4>
+              <div class="specifications">
+                {{ product.metafields.custom.specifications }}
+              </div>
+            </div>
+          {% endif %}
+        </div>
+
+        {% comment %}Quick Actions{% endcomment %}
+        <div class="product-actions">
+          <a href="{{ product.url }}" class="view-details">View Details</a>
+          {% if product.available %}
+            <form method="post" action="/cart/add">
+              <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+              <input type="number" name="quantity" value="1" min="1" max="{{ product.inventory_quantity }}">
+              <button type="submit">Add to Cart</button>
+            </form>
+          {% endif %}
+        </div>
+      </div>
     {% endfor %}
-  </ul>
+
+    {% if paginate.pages > 1 %}
+      <div class="pagination">
+        {{ paginate | default_pagination }}
+      </div>
+    {% endif %}
+  {% endpaginate %}
 </div>
 
 {% schema %}
