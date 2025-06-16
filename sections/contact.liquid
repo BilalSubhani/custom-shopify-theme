@@ -1,22 +1,209 @@
-<div>
-  <h1>Contact {{shop.name}}</h1>
-  <form method="post" action="/contact">
-    <label>Name</label><br>
-    <input type="text" name="contact[name]" /><br><br>
+{%- style -%}
+  .contact-section {
+    padding: 60px 0;
+    background: #f8f8f8;
+  }
+{%- endstyle -%}
 
-    <label>Email</label><br>
-    <input type="email" name="contact[email]" /><br><br>
 
-    <label>Message</label><br>
-    <textarea name="contact[body]"></textarea><br><br>
 
-    <input type="submit" value="Send" />
-  </form>
+<div class="contact-section">
+  <div class="contact-container">
+    <div class="contact-header">
+      <h1 class="contact-title">{{ section.settings.title }}</h1>
+      {% if section.settings.subtitle != blank %}
+        <p class="contact-subtitle">{{ section.settings.subtitle }}</p>
+      {% endif %}
+    </div>
+
+    <div class="contact-content">
+      <div class="contact-info">
+        {% if section.settings.show_store_info %}
+          <div class="store-info">
+            <h2>{{ section.settings.store_info_title }}</h2>
+            {% if section.settings.store_address != blank %}
+              <div class="info-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <p>{{ section.settings.store_address }}</p>
+              </div>
+            {% endif %}
+            {% if section.settings.store_phone != blank %}
+              <div class="info-item">
+                <i class="fas fa-phone"></i>
+                <p><a href="tel:{{ section.settings.store_phone }}">{{ section.settings.store_phone }}</a></p>
+              </div>
+            {% endif %}
+            {% if section.settings.store_email != blank %}
+              <div class="info-item">
+                <i class="fas fa-envelope"></i>
+                <p><a href="mailto:{{ section.settings.store_email }}">{{ section.settings.store_email }}</a></p>
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="contact-form-wrapper">
+        {% form 'contact', id: 'contact-form' %}
+          {% if form.posted_successfully? %}
+            <div class="form-success">
+              <i class="fas fa-check-circle"></i>
+              <p>{{ 'contact.form.success' | t }}</p>
+            </div>
+          {% endif %}
+
+          {% if form.errors %}
+            <div class="form-errors">
+              <i class="fas fa-exclamation-circle"></i>
+              <p>{{ 'contact.form.error' | t }}</p>
+              <ul>
+                {% for error in form.errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+
+          <div class="form-group">
+            <label for="ContactFormName">Full Name</label>
+            <input type="text"
+              id="ContactFormName"
+              name="contact[name]"
+              value="{{ form.name }}"
+              required
+              class="form-control"
+              placeholder="Enter your full name">
+          </div>
+
+          <div class="form-group">
+            <label for="ContactFormEmail">Email</label>
+            <input type="email"
+              id="ContactFormEmail"
+              name="contact[email]"
+              value="{{ form.email }}"
+              required
+              class="form-control"
+              placeholder="Enter your email.">
+          </div>
+
+          {% if section.settings.show_phone %}
+            <div class="form-group">
+              <label for="ContactFormPhone">Phone Number</label>
+              <input type="tel"
+                id="ContactFormPhone"
+                name="contact[phone]"
+                value="{{ form.phone }}"
+                class="form-control"
+                placeholder="Enter your phone number">
+            </div>
+          {% endif %}
+
+          <div class="form-group">
+            <label for="ContactFormMessage">Message</label>
+            <textarea
+              id="ContactFormMessage"
+              name="contact[body]"
+              required
+              class="form-control"
+              placeholder="Type your message here."
+              rows="5"></textarea>
+          </div>
+
+          <button type="submit" class="submit-button">
+            <span>Submit</span>
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        {% endform %}
+      </div>
+    </div>
+  </div>
 </div>
 
 {% schema %}
 {
-  "name": "Contact",
-  "settings": []
+  "name": "Contact Form",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Contact Us"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "We'd love to hear from you"
+    },
+    {
+      "type": "header",
+      "content": "Store Information"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_store_info",
+      "label": "Show Store Information",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "store_info_title",
+      "label": "Store Info Title",
+      "default": "Store Information"
+    },
+    {
+      "type": "textarea",
+      "id": "store_address",
+      "label": "Store Address"
+    },
+    {
+      "type": "text",
+      "id": "store_phone",
+      "label": "Store Phone"
+    },
+    {
+      "type": "text",
+      "id": "store_email",
+      "label": "Store Email"
+    },
+    {
+      "type": "header",
+      "content": "Business Hours"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_business_hours",
+      "label": "Show Business Hours",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "business_hours_title",
+      "label": "Business Hours Title",
+      "default": "Business Hours"
+    },
+    {
+      "type": "textarea",
+      "id": "business_hours",
+      "label": "Business Hours",
+      "default": "Monday - Friday: 9am - 5pm\nSaturday: 10am - 4pm\nSunday: Closed"
+    },
+    {
+      "type": "header",
+      "content": "Form Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_phone",
+      "label": "Show Phone Field",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact Form",
+      "category": "Contact"
+    }
+  ]
 }
 {% endschema %}

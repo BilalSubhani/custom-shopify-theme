@@ -503,23 +503,3 @@
 .header-hidden {
   transform: translateY(-100%);
 }
-
-/* ==========================================================================
-     FOCUS STATES FOR ACCESSIBILITY
-     ========================================================================== */
-
-.nav-link:focus,
-.search-toggle button:focus,
-.account-link a:focus,
-.wishlist-link a:focus,
-.cart-link a:focus,
-.dropdown-item:focus {
-  outline: 2px solid #007bff;
-  outline-offset: 2px;
-}
-
-.mobile-menu-toggle:focus {
-  outline: 2px solid #007bff;
-  outline-offset: 2px;
-  border-radius: 4px;
-}

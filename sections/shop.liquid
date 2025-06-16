@@ -26,10 +26,6 @@
           {% for product in collections.all.products %}
             <div class="product-card">
               {% comment %}Product Title and Basic Info{% endcomment %}
-              <div class="product-header">
-                <h2><a href="{{ product.url }}">{{ product.title }}</a></h2>
-                <p class="vendor">By {{ product.vendor }}</p>
-              </div>
 
               {% comment %}Product Images{% endcomment %}
               <div class="product-images">
@@ -49,6 +45,10 @@
 
               {% comment %}Product Details{% endcomment %}
               <div class="product-details">
+                <div class="product-header">
+                  <h2><a href="{{ product.url }}">{{ product.title }}</a></h2>
+                  <p class="vendor">By {{ product.vendor }}</p>
+                </div>
                 <div class="price-section">
                   <p class="price">{{ product.price | money }}</p>
                   {% if product.compare_at_price > product.price %}
@@ -56,12 +56,6 @@
                     <p class="savings">Save {{ product.compare_at_price | minus: product.price | money }}</p>
                   {% endif %}
                 </div>
-
-                {% if product.description != blank %}
-                  <div class="description-section">
-                    <div class="description">{{ product.description | strip_html | truncatewords: 30 }}</div>
-                  </div>
-                {% endif %}
               </div>
             </div>
           {% endfor %}
