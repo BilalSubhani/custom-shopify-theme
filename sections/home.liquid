@@ -1,24 +1,11 @@
-<section>
-  <h1>{{ section.settings.heading }}</h1>
-  <p>{{ section.settings.text }}</p>
-</section>
+<div>
+  <p>Welcome to our Shopify store</p>
+  <p>Today is {{ 'now' | date: "%A, %B %d, %Y" }}</p>
+</div>
 
 {% schema %}
 {
-  "name": "Home Section",
-  "settings": [
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Welcome to my custom theme"
-    },
-    {
-      "type": "text",
-      "id": "text",
-      "label": "Subtext",
-      "default": "This is the first section I built myself"
-    }
-  ]
+  "name": "Home",
+  "settings": []
 }
 {% endschema %}
