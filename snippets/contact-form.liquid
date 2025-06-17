@@ -1,0 +1,131 @@
+<!-- Contact Form Snippet -->
+{% form 'contact' %}
+  {% if form.posted_successfully? %}
+    <div class="form-success">
+      <p>Thank you for your message! We'll get back to you soon.</p>
+    </div>
+  {% endif %}
+
+  {% if form.errors %}
+    <div class="form-errors">
+      <h4>Please correct the following errors:</h4>
+      <ul>
+        {% for field in form.errors %}
+          <li>{{ field | capitalize }} {{ form.errors.messages[field] }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+  <div class="form-group">
+    <label for="contact_name">Name *</label>
+    <input 
+      type="text" 
+      id="contact_name" 
+      name="contact[name]" 
+      value="{% if form.name %}{{ form.name }}{% endif %}"
+      required
+      placeholder="Your full name"
+    >
+  </div>
+
+  <div class="form-group">
+    <label for="contact_email">Email *</label>
+    <input 
+      type="email" 
+      id="contact_email" 
+      name="contact[email]" 
+      value="{% if form.email %}{{ form.email }}{% endif %}"
+      required
+      placeholder="your.email@example.com"
+    >
+  </div>
+
+  <div class="form-group">
+    <label for="contact_phone">Phone</label>
+    <input 
+      type="tel" 
+      id="contact_phone" 
+      name="contact[phone]" 
+      value="{% if form.phone %}{{ form.phone }}{% endif %}"
+      placeholder="Your phone number"
+    >
+  </div>
+
+  <div class="form-group">
+    <label for="contact_subject">Subject *</label>
+    <select id="contact_subject" name="contact[subject]" required>
+      <option value="">Select a subject</option>
+      <option value="General Inquiry" {% if form.subject == "General Inquiry" %}selected{% endif %}>General Inquiry</option>
+      <option value="Product Question" {% if form.subject == "Product Question" %}selected{% endif %}>Product Question</option>
+      <option value="Order Support" {% if form.subject == "Order Support" %}selected{% endif %}>Order Support</option>
+      <option value="Returns & Exchanges" {% if form.subject == "Returns & Exchanges" %}selected{% endif %}>Returns & Exchanges</option>
+      <option value="Technical Support" {% if form.subject == "Technical Support" %}selected{% endif %}>Technical Support</option>
+      <option value="Partnership" {% if form.subject == "Partnership" %}selected{% endif %}>Partnership</option>
+      <option value="Other" {% if form.subject == "Other" %}selected{% endif %}>Other</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="contact_message">Message *</label>
+    <textarea 
+      id="contact_message" 
+      name="contact[body]" 
+      required
+      placeholder="Please describe your inquiry in detail..."
+    >{% if form.body %}{{ form.body }}{% endif %}</textarea>
+  </div>
+
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary">Send Message</button>
+  </div>
+{% endform %}
+
+<style>
+/* Contact Form Styles */
+.form-success {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.form-errors {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.form-errors h4 {
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+.form-errors ul {
+  margin-left: 20px;
+}
+
+.form-errors li {
+  margin-bottom: 5px;
+}
+
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e9ecef;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: white;
+  transition: border-color 0.3s ease;
+}
+
+.form-group select:focus {
+  outline: none;
+  border-color: #007bff;
+}
+</style>
